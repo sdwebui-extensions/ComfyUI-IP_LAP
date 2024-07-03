@@ -6,6 +6,7 @@ from pydub import AudioSegment
 from moviepy.editor import VideoFileClip,AudioFileClip
 
 parent_directory = os.path.dirname(os.path.abspath(__file__))
+cache_dir = "/stable-diffusion-cache/models/IP_LAP"
 
 from .ip_lap.inference import IP_LAP_infer
 
@@ -133,6 +134,8 @@ class IP_LAP:
 
     def process(self, audio, video, T=5,Nl=15,ref_img_N=25,img_size=128,
                 mel_step_size=16,face_det_batch_size=4,checkpoints_path=""):
+        if os.path.exists(cache_dir):
+            checkpoints_path = cache_dir
         ip_lap = IP_LAP_infer(T,Nl,ref_img_N,img_size,mel_step_size,face_det_batch_size,checkpoints_path)
         video_name = os.path.basename(video)
         out_video_file = os.path.join(out_path, f"ip_lap_{video_name}")
