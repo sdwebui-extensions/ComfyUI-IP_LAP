@@ -3,10 +3,11 @@ import mediapipe as mp
 import numpy as np
 from tqdm import tqdm
 from .draw_landmark import draw_landmarks
-import face_alignment
 from .face_mask import FaceMask
 from cuda_malloc import cuda_malloc_supported
 from .models import Landmark_generator as Landmark_transformer,Renderer,audio
+
+face_alignment = None
 
 NAME = "IP_LAP"
 
@@ -84,6 +85,9 @@ class IP_LAP_infer:
                  img_size=128,mel_step_size=16,
                  face_det_batch_size=4,
                  checkpoints_path=""):
+        global face_alignment
+        if face_alignment is None:
+            import face_alignment
         self.T = T
         self.Nl = Nl
         self.ref_img_N = ref_img_N
