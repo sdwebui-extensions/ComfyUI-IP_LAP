@@ -2,8 +2,8 @@ import os
 import platform
 import subprocess
 import folder_paths
-from pydub import AudioSegment
 from moviepy.editor import VideoFileClip,AudioFileClip
+AudioSegment = None
 
 parent_directory = os.path.dirname(os.path.abspath(__file__))
 cache_dir = "/stable-diffusion-cache/models/IP_LAP"
@@ -33,6 +33,9 @@ class CombineAudioVideo:
     FUNCTION = "combine"
 
     def combine(self, vocal_AUDIO,bgm_AUDIO,video):
+        global AudioSegment
+        if AudioSegment is None:
+            from pydub import AudioSegment
         vocal = AudioSegment.from_file(vocal_AUDIO)
         bgm = AudioSegment.from_file(bgm_AUDIO)
         audio = vocal.overlay(bgm)
