@@ -2,13 +2,10 @@ import os
 import platform
 import subprocess
 import folder_paths
-from moviepy.editor import VideoFileClip,AudioFileClip
 AudioSegment = None
 
 parent_directory = os.path.dirname(os.path.abspath(__file__))
 cache_dir = "/stable-diffusion-cache/models/IP_LAP"
-
-from .ip_lap.inference import IP_LAP_infer
 
 input_path = folder_paths.get_input_directory()
 out_path = folder_paths.get_output_directory()
@@ -33,6 +30,7 @@ class CombineAudioVideo:
     FUNCTION = "combine"
 
     def combine(self, vocal_AUDIO,bgm_AUDIO,video):
+        from moviepy.editor import VideoFileClip,AudioFileClip
         global AudioSegment
         if AudioSegment is None:
             from pydub import AudioSegment
@@ -88,6 +86,7 @@ class LoadVideo:
     FUNCTION = "load_video"
 
     def load_video(self, video):
+        from moviepy.editor import VideoFileClip
         video_path = os.path.join(input_path,video)
         video_clip = VideoFileClip(video_path)
         audio_path = os.path.join(input_path,video+".wav")
@@ -137,6 +136,7 @@ class IP_LAP:
 
     def process(self, audio, video, T=5,Nl=15,ref_img_N=25,img_size=128,
                 mel_step_size=16,face_det_batch_size=4,checkpoints_path=""):
+        from .ip_lap.inference import IP_LAP_infer
         if os.path.exists(cache_dir):
             checkpoints_path = cache_dir
         ip_lap = IP_LAP_infer(T,Nl,ref_img_N,img_size,mel_step_size,face_det_batch_size,checkpoints_path)
